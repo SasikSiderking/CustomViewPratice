@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -22,13 +23,8 @@ class FieldOfDreams @JvmOverloads constructor(
 
     private val centerX by lazy { width / 2 }
     private val centerY by lazy { height / 2 }
-    private val radius by lazy { min(width, height) / 3f }
-    private val shapeBounds by lazy {
-        RectF(
-            centerX - radius, centerY - radius, centerX + radius,
-            centerY + radius
-        )
-    }
+    private var radius: Float = 0f
+    private var shapeBounds: RectF? = null
     var numberOfSectors = 7
     private val anglePerSector: Float = 360f / numberOfSectors
     var sectorArray = Array(numberOfSectors) { i -> getDefaultSector(i) }
@@ -69,13 +65,20 @@ class FieldOfDreams @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (radius == 0f) {
+            radius = getNormalRadius()
+            shapeBounds = RectF(
+                centerX - radius, centerY - radius, centerX + radius,
+                centerY + radius
+            )
+        }
         canvas.apply {
 
             drawText(text, centerX.toFloat(), centerY.toFloat() - (radius + textHeight), textPaint)
 
             for (i in 0 until numberOfSectors) {
                 drawArc(
-                    shapeBounds,
+                    shapeBounds!!,
                     axisAngle - (i + 1) * anglePerSector,
                     anglePerSector,
                     true, sectorArray[i].paint
@@ -113,6 +116,10 @@ class FieldOfDreams @JvmOverloads constructor(
             addListener(animListener)
             start()
         }
+    }
+
+    private fun getNormalRadius(): Float {
+        return min(width, height) / 3f
     }
 
     private fun setAxisAngle(newAxisAngle: Int) {
@@ -187,6 +194,21 @@ class FieldOfDreams @JvmOverloads constructor(
 
     fun reset() {
         text = ""
+        radius = getNormalRadius()
+        shapeBounds = RectF(
+            centerX - radius, centerY - radius, centerX + radius,
+            centerY + radius
+        )
+        invalidate()
+    }
+
+    fun scaleRadius(scale: Float) {
+        Log.e("SUS", scale.toString())
+        radius = getNormalRadius() * scale
+        shapeBounds = RectF(
+            centerX - radius, centerY - radius, centerX + radius,
+            centerY + radius
+        )
         invalidate()
     }
 
