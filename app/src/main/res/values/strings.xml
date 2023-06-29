@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CustomViewPratice</string>
+    <string name="field_of_dreams_image">Картинка с барабана</string>
+    <string name="reset_button">Reset</string>
 </resources>
