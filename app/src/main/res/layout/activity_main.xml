@@ -8,18 +8,27 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:contentDescription="@string/field_of_dreams_image"
         app:layout_constraintBottom_toTopOf="@id/fieldOfDreams"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/field_of_dreams_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.customviewpratice.FieldOfDreams
         android:id="@+id/fieldOfDreams"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/resetButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/fieldOfDreams" />
 </androidx.constraintlayout.widget.ConstraintLayout>

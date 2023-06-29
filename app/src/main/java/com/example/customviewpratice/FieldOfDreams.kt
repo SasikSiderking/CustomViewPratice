@@ -106,11 +106,11 @@ class FieldOfDreams @JvmOverloads constructor(
     }
 
     private fun rotate() {
-        val rotationAngle = Random.nextInt(0, 7200)
+        val rotationAngle = Random.nextInt(0, DEFAULT_ROTATION_DEGREES)
         ObjectAnimator.ofInt(this, "axisAngle", this.axisAngle, rotationAngle).apply {
             duration = rotationAngle.toLong()
             interpolator = decelerateInterpolator
-            addListener(AnimListener())
+            addListener(animListener)
             start()
         }
     }
@@ -122,43 +122,43 @@ class FieldOfDreams @JvmOverloads constructor(
 
     private fun getDefaultSector(sectorIndex: Int): Sector {
         return when (sectorIndex) {
-            0 -> Sector("Red", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            0 -> Sector("Red", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(255, 0, 0)
                 style = Paint.Style.FILL
             })
 
-            1 -> Sector("Orange", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            1 -> Sector("Orange", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(255, 165, 0)
                 style = Paint.Style.FILL
             })
 
-            2 -> Sector("Yellow", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            2 -> Sector("Yellow", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(255, 255, 0)
                 style = Paint.Style.FILL
             })
 
-            3 -> Sector("Green", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            3 -> Sector("Green", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(0, 255, 0)
                 style = Paint.Style.FILL
             })
 
-            4 -> Sector("Light blue", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            4 -> Sector("Light blue", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(0, 191, 255)
                 style = Paint.Style.FILL
             })
 
-            5 -> Sector("Blue", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            5 -> Sector("Blue", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(0, 0, 255)
                 style = Paint.Style.FILL
             })
 
-            6 -> Sector("Violet", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+            6 -> Sector("Violet", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(143, 0, 255)
                 style = Paint.Style.FILL
             })
 
             else -> {
-                Sector("Random", imageUrl, Paint(ANTI_ALIAS_FLAG).apply {
+                Sector("Random", IMAGE_URL, Paint(ANTI_ALIAS_FLAG).apply {
                     color = Color.rgb(
                         Random.nextInt(0, 255),
                         Random.nextInt(0, 255),
@@ -185,13 +185,18 @@ class FieldOfDreams @JvmOverloads constructor(
         this.loadImageCallback = callback
     }
 
+    fun reset() {
+        text = ""
+        invalidate()
+    }
+
     data class Sector(
         val name: String,
         val imageUrl: String,
         val paint: Paint
     )
 
-    private inner class AnimListener: AnimatorListener{
+    private val animListener = object : AnimatorListener {
         override fun onAnimationStart(animation: Animator) {
             text = ""
             invalidate()
@@ -201,17 +206,14 @@ class FieldOfDreams @JvmOverloads constructor(
             resolveChosenColor()
         }
 
-        override fun onAnimationCancel(animation: Animator) {
-            TODO("Not yet implemented")
-        }
+        override fun onAnimationCancel(animation: Animator) {}
 
-        override fun onAnimationRepeat(animation: Animator) {
-            TODO("Not yet implemented")
-        }
+        override fun onAnimationRepeat(animation: Animator) {}
 
     }
 
     private companion object {
-        const val imageUrl = "https://picsum.photos/200/300"
+        const val IMAGE_URL = "https://picsum.photos/200/300"
+        const val DEFAULT_ROTATION_DEGREES = 7200
     }
 }
